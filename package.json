@@ -1,0 +1,46 @@
+{
+  "name": "dual-ai-orchestrator-platform",
+  "version": "2.0.0",
+  "description": "Enterprise-grade AI collaboration platform enabling seamless interaction between OpenAI and Claude/Anthropic models",
+  "main": "backend/server.js",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "scripts": {
+    "start": "NODE_OPTIONS='--max-old-space-size=2048' node backend/server.js",
+    "dev": "NODE_OPTIONS='--max-old-space-size=2048' nodemon backend/server.js",
+    "setup": "node scripts/setup.js",
+    "test": "node scripts/validate.js all",
+    "validate": "node scripts/validate.js all",
+    "health": "curl -s http://localhost:3001/health || echo 'Server not running'",
+    "postinstall": "echo '✅ Dependencies installed. Run npm run setup to configure.'"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "ws": "^8.14.2",
+    "uuid": "^9.0.1",
+    "bcryptjs": "^2.4.3",
+    "express-rate-limit": "^7.1.5",
+    "compression": "^1.7.4",
+    "express-validator": "^7.0.1",
+    "dotenv": "^16.3.1",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "keywords": [
+    "ai", "openai", "anthropic", "claude", "collaboration", 
+    "multi-agent", "orchestration", "real-time", "websocket", 
+    "dual-api", "enterprise", "macos"
+  ],
+  "author": "IAlready8",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IAlready8/dual-ai-orchestrator-platform.git"
+  }
+}

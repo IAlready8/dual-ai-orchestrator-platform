@@ -27,137 +27,74 @@ This is a **production-ready AI collaboration platform** that enables multiple A
 
 ## 🚀 **QUICK START**
 
-### **Prerequisites**
-- **Node.js 18+** (recommended: latest LTS)
-- **macOS** (optimized for M1/M2 Macs and Intel Macs)
-- **OpenAI API Key** (get from [OpenAI Platform](https://platform.openai.com/api-keys))
-- **Anthropic API Key** (get from [Anthropic Console](https://console.anthropic.com/))
-
-### **Installation**
-
 ```bash
-# Clone the repository
+# Clone and setup
 git clone https://github.com/IAlready8/dual-ai-orchestrator-platform.git
 cd dual-ai-orchestrator-platform
-
-# Option 1: Interactive Setup (Recommended)
 npm run setup
-
-# Option 2: Manual Setup
-cp .env.example .env
-# Edit .env with your API keys
-npm install
-
-# Start the platform
 npm start
 ```
 
-### **Access Your Platform**
-
-- **Web Interface**: http://localhost:3001
-- **Health Check**: http://localhost:3001/health
-- **API Statistics**: http://localhost:3001/api/stats
+**Access your platform at: http://localhost:3001**
 
 ---
 
 ## 🎯 **KEY FEATURES**
 
 ### **🔄 Dual-API Integration**
-- **OpenAI Models**: GPT-4, GPT-4o, GPT-4-turbo, GPT-3.5-turbo
-- **Anthropic Models**: Claude 3.5 Sonnet, Claude 3 Sonnet, Claude 3 Haiku, Claude 3 Opus
-- **Intelligent Routing**: Automatic provider selection based on task requirements
-- **Fallback Support**: Automatic switching on provider errors
-- **Unified Interface**: Single platform for managing both providers
+- OpenAI Models: GPT-4, GPT-4o, GPT-4-turbo, GPT-3.5-turbo
+- Anthropic Models: Claude 3.5 Sonnet, Claude 3 Sonnet, Claude 3 Haiku
+- Intelligent provider routing and fallback support
 
-### **🧠 Multi-Agent Orchestration**
-- **Individual Agent Memory**: Each agent maintains its own conversation history and context
-- **Customizable Personalities**: Configure agents with specific expertise and instructions
-- **Provider Preferences**: Assign preferred AI providers to each agent
-- **Turn-based Processing**: Intelligent agent sequencing and iteration control
-- **Context Management**: Automatic context window optimization
+### **🧠 Multi-Agent Orchestration** 
+- Individual agent memory and conversation history
+- Customizable personalities and expertise areas
+- Turn-based processing with intelligent sequencing
 
 ### **⚡ Real-time Features**
-- **WebSocket Communication**: Live updates and real-time collaboration
-- **Session Persistence**: Save, resume, and manage conversation sessions
-- **Live Metrics**: Real-time performance monitoring and analytics
-- **Multi-client Support**: Multiple users can collaborate simultaneously
-- **Auto-save**: Automatic conversation backups and recovery
+- WebSocket communication for live updates
+- Session persistence and conversation management
+- Multi-client collaboration support
 
 ### **🔒 Enterprise Security**
-- **Rate Limiting**: Configurable per-provider and global rate limits
-- **Input Validation**: Comprehensive request validation and sanitization
-- **API Key Security**: Encrypted storage and secure transmission
-- **CORS Protection**: Configurable origin restrictions
-- **Security Headers**: Helmet.js protection with Content Security Policy
-- **Session Security**: UUID-based sessions with automatic cleanup
+- Rate limiting per provider and globally
+- Comprehensive input validation
+- Secure API key storage and transmission
 
 ### **📊 Advanced Analytics**
-- **Usage Metrics**: Request counts, response times, and error rates
-- **Cost Tracking**: Token usage and estimated API costs
-- **Performance Analytics**: Agent performance and system metrics
-- **Health Monitoring**: Continuous system health checks
-- **Export Capabilities**: Multiple export formats for conversations
-- **Historical Data**: Comprehensive usage and performance history
-
-### **🎨 Beautiful Interface**
-- **Modern Design**: Clean, responsive interface with intuitive controls
-- **Dark Mode Support**: Automatic dark/light mode detection
-- **Real-time Updates**: Live conversation display and status indicators
-- **Agent Configuration**: Visual agent setup and customization
-- **Progress Tracking**: Visual progress indicators and collaboration status
-- **Template System**: Pre-built collaboration templates
+- Usage metrics and cost tracking
+- Performance monitoring and health checks
+- Export capabilities for conversations
 
 ---
 
 ## 💻 **MACOS OPTIMIZATION**
 
-### **Why No Docker?**
-This platform is specifically optimized for **native macOS deployment** to provide:
-- **Maximum Performance**: Direct Node.js execution without containerization overhead
-- **Resource Efficiency**: Optimized memory usage for macOS systems
-- **Simplified Deployment**: No container management complexity
-- **Native Integration**: Leverages macOS-specific optimizations
-
-### **Memory Management**
-- **Optimized for 8GB+ macOS systems** (MacBook M2, Mac Pro, etc.)
-- **Conservative memory limits**: `--max-old-space-size=2048`
-- **Efficient garbage collection**: Optimized for macOS memory management
-- **Resource monitoring**: Real-time memory and CPU usage tracking
+**Why No Docker?** This platform is optimized for native macOS deployment:
+- Maximum performance without containerization overhead
+- Optimized for 8GB+ macOS systems (MacBook M2, Mac Pro)
+- Simplified deployment with no container complexity
 
 ---
 
-## 🛠️ **AVAILABLE COMMANDS**
+## 🛠️ **COMMANDS**
 
-### **Setup & Configuration**
 ```bash
+# Setup
 npm run setup              # Interactive setup wizard
-./deploy.sh setup         # Comprehensive deployment setup
-```
 
-### **Starting the Platform**
-```bash
+# Start
 npm start                  # Production mode
-./start.sh                # Quick start script
-npm run dev               # Development mode with auto-restart
-./dev.sh                  # Development with nodemon
-```
+npm run dev               # Development with auto-restart
 
-### **Management & Maintenance**
-```bash
-./deploy.sh stop          # Stop the server
-./deploy.sh restart       # Restart the server
+# Management
 ./deploy.sh status        # Check system status
-./deploy.sh health        # Comprehensive health check
+./deploy.sh health        # Health monitoring
 ./deploy.sh backup        # Create backup
-./deploy.sh clean         # Clean project files
-./deploy.sh update        # Update dependencies
-```
 
-### **Testing & Validation**
-```bash
+# Testing
 npm test                  # Run comprehensive tests
 npm run validate          # Full system validation
-./deploy.sh health        # Health monitoring
 ```
 
 ---
@@ -165,43 +102,38 @@ npm run validate          # Full system validation
 ## 🎯 **USAGE EXAMPLES**
 
 ### **Basic Collaboration**
-1. **Configure API Keys**: Add OpenAI and/or Anthropic API keys in `.env`
-2. **Set Project Goal**: "Design a mobile app for productivity"
-3. **Configure Agents**: Set up agents with different expertise (UI/UX Designer, Developer, Product Manager)
-4. **Start Collaboration**: Watch AI agents work together to achieve your goal
+1. Add API keys to `.env`
+2. Configure agents with different expertise
+3. Set collaboration goal
+4. Watch AI agents work together
 
-### **Research Collaboration**
-1. **Use Research Template**: Select "Collaborative Research" template
-2. **Set Research Goal**: "Analyze AI trends in healthcare"
-3. **Configure Specialist Agents**: Research Analyst (Claude) + Industry Expert (OpenAI)
-4. **Export Results**: Generate comprehensive research report
+### **Research Project**
+1. Use "Research" template
+2. Configure Research Analyst (Claude) + Expert (OpenAI)
+3. Export comprehensive reports
 
 ### **Product Development**
-1. **Use Product Template**: Select "Product Development" workflow
-2. **Define Product Goal**: "Create SaaS platform for small businesses"
-3. **Set Team Roles**: Product Manager (OpenAI) + Tech Lead (Claude) + Market Analyst (OpenAI)
-4. **Iterate and Refine**: Track progress through multiple development iterations
+1. Use "Product Development" workflow
+2. Set team roles: PM + Tech Lead + Analyst
+3. Track progress through iterations
 
 ---
 
-## 📞 **SUPPORT & COMMUNITY**
+## 📞 **SUPPORT**
 
-- **GitHub Repository**: [https://github.com/IAlready8/dual-ai-orchestrator-platform](https://github.com/IAlready8/dual-ai-orchestrator-platform)
-- **Issues & Bug Reports**: [GitHub Issues](https://github.com/IAlready8/dual-ai-orchestrator-platform/issues)
-- **Feature Requests**: [GitHub Issues](https://github.com/IAlready8/dual-ai-orchestrator-platform/issues) with "enhancement" label
-- **Documentation**: Complete guides in README.md and QUICKSTART.md
+- **Repository**: [GitHub](https://github.com/IAlready8/dual-ai-orchestrator-platform)
+- **Issues**: [GitHub Issues](https://github.com/IAlready8/dual-ai-orchestrator-platform/issues)
+- **Documentation**: Complete guides in repository
 
 ---
 
 ## 📄 **LICENSE**
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE) file.
 
 ---
 
-## 🎉 **GET STARTED TODAY!**
-
-Your Dual-AI Orchestrator Platform is ready to revolutionize how you work with AI. Start by running:
+## 🎉 **GET STARTED!**
 
 ```bash
 git clone https://github.com/IAlready8/dual-ai-orchestrator-platform.git
@@ -210,10 +142,6 @@ npm run setup
 npm start
 ```
 
-Then open http://localhost:3001 and **start collaborating with the world's most advanced AI models!**
+**Open http://localhost:3001 and start collaborating with AI!**
 
----
-
-### 🏆 **Built for Excellence. Optimized for macOS. Ready for Production.**
-
-**Experience the future of AI collaboration today!** 🚀
+### 🏆 **Built for Excellence. Ready for Production.** 🚀
