@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dual-AI Orchestrator Platform</title>
+    <meta name="description" content="Enterprise-grade AI collaboration platform with OpenAI and Anthropic integration">
+    <meta name="author" content="IAlready8">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s infinite',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'spin-slow': 'spin 3s linear infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .dark .glass-effect {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .message-bubble {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .typing-indicator {
+            animation: pulse 1.5s infinite;
+        }
+        
+        .status-indicator {
+            position: relative;
+        }
+        
+        .status-indicator::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            background: inherit;
+            animation: ping 2s infinite;
+        }
+        
+        @keyframes ping {
+            75%, 100% {
+                transform: scale(1.1);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="text-3xl">🤖</div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900 dark:text-white">
+                            Dual-AI Orchestrator Platform
+                        </h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Enterprise AI Collaboration
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Connection Status -->
+                    <div class="flex items-center space-x-2">
+                        <div id="connection-status" class="w-3 h-3 rounded-full bg-red-500 status-indicator"></div>
+                        <span id="connection-text" class="text-sm text-gray-600 dark:text-gray-400">Connecting...</span>
+                    </div>
+                    
+                    <!-- Dark Mode Toggle -->
+                    <button id="theme-toggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                        <svg id="sun-icon" class="w-5 h-5 text-yellow-500 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                        </svg>
+                        <svg id="moon-icon" class="w-5 h-5 text-gray-700 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Welcome Section -->
+        <div id="welcome-section" class="mb-8">
+            <div class="gradient-bg rounded-xl p-8 text-white">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold mb-4">🚀 Welcome to AI Collaboration</h2>
+                    <p class="text-xl mb-6 opacity-90">
+                        Orchestrate conversations between OpenAI and Anthropic models in real-time
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4 text-sm">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+                            <span>Multi-Agent Orchestration</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full"></span>
+                            <span>Real-time WebSocket</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-purple-400 rounded-full"></span>
+                            <span>Enterprise Security</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-yellow-400 rounded-full"></span>
+                            <span>macOS Optimized</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Configuration Panel -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <!-- API Configuration -->
+            <div class="lg:col-span-1">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <span class="text-2xl mr-2">🔧</span>
+                        API Configuration
+                    </h3>
+                    
+                    <!-- Provider Status -->
+                    <div class="space-y-4 mb-6">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="text-xl">🧠</div>
+                                <span class="font-medium">OpenAI</span>
+                            </div>
+                            <div id="openai-status" class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
+                                <span class="text-sm text-gray-500">Unknown</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="text-xl">🤖</div>
+                                <span class="font-medium">Anthropic</span>
+                            </div>
+                            <div id="anthropic-status" class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
+                                <span class="text-sm text-gray-500">Unknown</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="space-y-2">
+                        <button id="check-health" class="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+                            🔍 Check System Health
+                        </button>
+                        <button id="view-stats" class="w-full px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors">
+                            📊 View Statistics
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Agent Configuration -->
+            <div class="lg:col-span-2">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <span class="text-2xl mr-2">👥</span>
+                        Agent Configuration
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Agent Name</label>
+                            <input id="agent-name" type="text" placeholder="e.g., Research Assistant" 
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Role</label>
+                            <input id="agent-role" type="text" placeholder="e.g., Data Analyst" 
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Provider</label>
+                            <select id="agent-provider" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="openai">OpenAI (GPT)</option>
+                                <option value="anthropic">Anthropic (Claude)</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Model</label>
+                            <select id="agent-model" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="gpt-4">GPT-4</option>
+                                <option value="gpt-4o">GPT-4o</option>
+                                <option value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet</option>
+                                <option value="claude-3-sonnet-20240229">Claude 3 Sonnet</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Instructions</label>
+                        <textarea id="agent-instructions" rows="3" placeholder="Describe the agent's role and expertise..." 
+                                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    </div>
+                    
+                    <button id="create-agent" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors">
+                        ➕ Create Agent
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Active Agents -->
+        <div class="mb-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <span class="text-2xl mr-2">🤖</span>
+                    Active Agents
+                    <span id="agent-count" class="ml-2 px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full">0</span>
+                </h3>
+                
+                <div id="agents-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="text-center text-gray-500 dark:text-gray-400 py-8 col-span-full">
+                        <div class="text-4xl mb-2">🤖</div>
+                        <p>No agents created yet. Create your first agent above!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Collaboration Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Collaboration Control -->
+            <div class="lg:col-span-1">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <span class="text-2xl mr-2">🎯</span>
+                        Collaboration Control
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Collaboration Goal</label>
+                            <textarea id="collaboration-goal" rows="3" placeholder="What would you like the agents to work on together?" 
+                                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Iterations</label>
+                            <select id="collaboration-iterations" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="1">1 Round</option>
+                                <option value="2">2 Rounds</option>
+                                <option value="3" selected>3 Rounds</option>
+                                <option value="4">4 Rounds</option>
+                                <option value="5">5 Rounds</option>
+                            </select>
+                        </div>
+                        
+                        <button id="start-collaboration" disabled class="w-full px-4 py-2 bg-purple-500 hover:bg-purple-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg transition-colors">
+                            🚀 Start Collaboration
+                        </button>
+                        
+                        <button id="clear-conversation" class="w-full px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors">
+                            🗑️ Clear Conversation
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Conversation Display -->
+            <div class="lg:col-span-2">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <span class="text-2xl mr-2">💬</span>
+                        AI Collaboration
+                    </h3>
+                    
+                    <div id="conversation" class="h-96 overflow-y-auto border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-700 space-y-4">
+                        <div class="text-center text-gray-500 dark:text-gray-400 py-8">
+                            <div class="text-4xl mb-2">💭</div>
+                            <p>Start a collaboration to see AI agents working together!</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress Indicator -->
+                    <div id="progress-container" class="mt-4 hidden">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-medium">Collaboration Progress</span>
+                            <span id="progress-text" class="text-sm text-gray-500">0% Complete</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                            <div id="progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- System Status -->
+        <div class="mt-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <span class="text-2xl mr-2">📊</span>
+                    System Status
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4" id="system-stats">
+                    <div class="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div class="text-2xl font-bold text-blue-500">--</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Total Requests</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div class="text-2xl font-bold text-green-500">--</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Active Sessions</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div class="text-2xl font-bold text-purple-500">--</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Uptime</div>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div class="text-2xl font-bold text-yellow-500">--</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Memory Usage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-sm text-gray-600 dark:text-gray-400">
+                    © 2024 Dual-AI Orchestrator Platform • Built for macOS • Enterprise-Grade AI Collaboration
+                </div>
+                <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                    <a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-500">Documentation</a>
+                    <a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-500">GitHub</a>
+                    <a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-500">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        class DualAIOrchestrator {
+            constructor() {
+                this.ws = null;
+                this.agents = new Map();
+                this.isConnected = false;
+                this.currentCollaboration = null;
+                this.requestId = 0;
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.initTheme();
+                this.connectWebSocket();
+                this.checkSystemHealth();
+                this.updateSystemStats();
+                
+                // Update stats every 30 seconds
+                setInterval(() => this.updateSystemStats(), 30000);
+            }
+            
+            setupEventListeners() {
+                // Theme toggle
+                document.getElementById('theme-toggle').addEventListener('click', this.toggleTheme.bind(this));
+                
+                // Agent creation
+                document.getElementById('create-agent').addEventListener('click', this.createAgent.bind(this));
+                document.getElementById('agent-provider').addEventListener('change', this.updateModelOptions.bind(this));
+                
+                // Collaboration
+                document.getElementById('start-collaboration').addEventListener('click', this.startCollaboration.bind(this));
+                document.getElementById('clear-conversation').addEventListener('click', this.clearConversation.bind(this));
+                
+                // System actions
+                document.getElementById('check-health').addEventListener('click', this.checkSystemHealth.bind(this));
+                document.getElementById('view-stats').addEventListener('click', this.viewDetailedStats.bind(this));
+            }
+            
+            initTheme() {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                if (savedTheme === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                }
+            }
+            
+            toggleTheme() {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            }
+            
+            connectWebSocket() {
+                const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                const host = window.location.hostname;
+                const port = 3002; // WebSocket port
+                
+                this.ws = new WebSocket(`${protocol}//${host}:${port}`);
+                
+                this.ws.onopen = () => {
+                    console.log('WebSocket connected');
+                    this.isConnected = true;
+                    this.updateConnectionStatus(true);
+                };
+                
+                this.ws.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        this.handleWebSocketMessage(data);
+                    } catch (error) {
+                        console.error('Failed to parse WebSocket message:', error);
+                    }
+                };
+                
+                this.ws.onclose = () => {
+                    console.log('WebSocket disconnected');
+                    this.isConnected = false;
+                    this.updateConnectionStatus(false);
+                    
+                    // Attempt to reconnect after 5 seconds
+                    setTimeout(() => this.connectWebSocket(), 5000);
+                };
+                
+                this.ws.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                    this.updateConnectionStatus(false);
+                };
+            }
+            
+            handleWebSocketMessage(data) {
+                switch (data.type) {
+                    case 'connected':
+                        console.log('Session established:', data.sessionId);
+                        break;
+                        
+                    case 'agent_response':
+                        this.handleAgentResponse(data);
+                        break;
+                        
+                    case 'collaboration_result':
+                        this.handleCollaborationResult(data);
+                        break;
+                        
+                    case 'error':
+                        this.showError(data.message);
+                        break;
+                        
+                    case 'pong':
+                        // Heartbeat response
+                        break;
+                }
+            }
+            
+            updateConnectionStatus(connected) {
+                const statusEl = document.getElementById('connection-status');
+                const textEl = document.getElementById('connection-text');
+                
+                if (connected) {
+                    statusEl.className = 'w-3 h-3 rounded-full bg-green-500 status-indicator';
+                    textEl.textContent = 'Connected';
+                } else {
+                    statusEl.className = 'w-3 h-3 rounded-full bg-red-500 status-indicator';
+                    textEl.textContent = 'Disconnected';
+                }
+            }
+            
+            updateModelOptions() {
+                const provider = document.getElementById('agent-provider').value;
+                const modelSelect = document.getElementById('agent-model');
+                
+                modelSelect.innerHTML = '';
+                
+                if (provider === 'openai') {
+                    const models = [
+                        { value: 'gpt-4', label: 'GPT-4' },
+                        { value: 'gpt-4o', label: 'GPT-4o' },
+                        { value: 'gpt-4-turbo', label: 'GPT-4 Turbo' },
+                        { value: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo' }
+                    ];
+                    models.forEach(model => {
+                        const option = new Option(model.label, model.value);
+                        modelSelect.add(option);
+                    });
+                } else if (provider === 'anthropic') {
+                    const models = [
+                        { value: 'claude-3-5-sonnet-20241022', label: 'Claude 3.5 Sonnet' },
+                        { value: 'claude-3-sonnet-20240229', label: 'Claude 3 Sonnet' },
+                        { value: 'claude-3-haiku-20240307', label: 'Claude 3 Haiku' },
+                        { value: 'claude-3-opus-20240229', label: 'Claude 3 Opus' }
+                    ];
+                    models.forEach(model => {
+                        const option = new Option(model.label, model.value);
+                        modelSelect.add(option);
+                    });
+                }
+            }
+            
+            async createAgent() {
+                const name = document.getElementById('agent-name').value.trim();
+                const role = document.getElementById('agent-role').value.trim();
+                const provider = document.getElementById('agent-provider').value;
+                const model = document.getElementById('agent-model').value;
+                const instructions = document.getElementById('agent-instructions').value.trim();
+                
+                if (!name || !role || !instructions) {
+                    this.showError('Please fill in all required fields');
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/api/agents', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, role, provider, model, instructions })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        this.agents.set(result.agent.id, result.agent);
+                        this.renderAgents();
+                        this.clearAgentForm();
+                        this.showSuccess(`Agent "${name}" created successfully!`);
+                    } else {
+                        this.showError(result.error || 'Failed to create agent');
+                    }
+                } catch (error) {
+                    this.showError('Network error: ' + error.message);
+                }
+            }
+            
+            clearAgentForm() {
+                document.getElementById('agent-name').value = '';
+                document.getElementById('agent-role').value = '';
+                document.getElementById('agent-instructions').value = '';
+            }
+            
+            renderAgents() {
+                const container = document.getElementById('agents-list');
+                const agentsArray = Array.from(this.agents.values());
+                
+                if (agentsArray.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center text-gray-500 dark:text-gray-400 py-8 col-span-full">
+                            <div class="text-4xl mb-2">🤖</div>
+                            <p>No agents created yet. Create your first agent above!</p>
+                        </div>
+                    `;
+                    document.getElementById('start-collaboration').disabled = true;
+                } else {
+                    container.innerHTML = agentsArray.map(agent => `
+                        <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-medium">${agent.name}</h4>
+                                <span class="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded">
+                                    ${agent.provider === 'openai' ? '🧠 OpenAI' : '🤖 Anthropic'}
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">${agent.role}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-500 mb-3">${agent.instructions.substring(0, 100)}${agent.instructions.length > 100 ? '...' : ''}</p>
+                            <button onclick="orchestrator.removeAgent('${agent.id}')" class="text-xs text-red-500 hover:text-red-700">
+                                🗑️ Remove
+                            </button>
+                        </div>
+                    `).join('');
+                    
+                    document.getElementById('start-collaboration').disabled = agentsArray.length < 1;
+                }
+                
+                document.getElementById('agent-count').textContent = agentsArray.length;
+            }
+            
+            removeAgent(agentId) {
+                this.agents.delete(agentId);
+                this.renderAgents();
+                this.showSuccess('Agent removed');
+            }
+            
+            startCollaboration() {
+                const goal = document.getElementById('collaboration-goal').value.trim();
+                const iterations = parseInt(document.getElementById('collaboration-iterations').value);
+                
+                if (!goal) {
+                    this.showError('Please enter a collaboration goal');
+                    return;
+                }
+                
+                if (this.agents.size === 0) {
+                    this.showError('Please create at least one agent first');
+                    return;
+                }
+                
+                const agentIds = Array.from(this.agents.keys());
+                
+                this.currentCollaboration = {
+                    goal,
+                    iterations,
+                    agentIds,
+                    startTime: Date.now()
+                };
+                
+                // Show progress
+                document.getElementById('progress-container').classList.remove('hidden');
+                this.updateProgress(0, 'Starting collaboration...');
+                
+                // Clear conversation
+                document.getElementById('conversation').innerHTML = '';
+                
+                // Add initial message
+                this.addMessage('system', '🎯 Collaboration Started', `Goal: ${goal}\nAgents: ${agentIds.length}\nIterations: ${iterations}`);
+                
+                // Send to WebSocket
+                if (this.isConnected) {
+                    this.ws.send(JSON.stringify({
+                        type: 'start_collaboration',
+                        requestId: ++this.requestId,
+                        agentIds,
+                        goal,
+                        iterations
+                    }));
+                } else {
+                    this.showError('WebSocket not connected');
+                }
+            }
+            
+            handleCollaborationResult(data) {
+                const collaboration = data.collaboration;
+                
+                // Add each conversation entry
+                collaboration.conversation.forEach((entry, index) => {
+                    if (entry.error) {
+                        this.addMessage('error', entry.agent.id, entry.error);
+                    } else {
+                        const agent = this.agents.get(entry.agent.id);
+                        const agentName = agent ? agent.name : entry.agent.name;
+                        this.addMessage('agent', agentName, entry.response, entry.agent.provider);
+                    }
+                });
+                
+                // Update progress to complete
+                this.updateProgress(100, 'Collaboration completed!');
+                
+                // Add completion message
+                const duration = ((collaboration.completed - collaboration.started) / 1000).toFixed(1);
+                this.addMessage('system', '✅ Collaboration Complete', `Duration: ${duration}s\nTotal responses: ${collaboration.conversation.length}`);
+                
+                setTimeout(() => {
+                    document.getElementById('progress-container').classList.add('hidden');
+                }, 3000);
+            }
+            
+            addMessage(type, sender, content, provider = null) {
+                const conversation = document.getElementById('conversation');
+                const messageEl = document.createElement('div');
+                messageEl.className = 'message-bubble';
+                
+                let icon = '💬';
+                let bgColor = 'bg-gray-100 dark:bg-gray-600';
+                let textColor = 'text-gray-800 dark:text-gray-200';
+                
+                if (type === 'system') {
+                    icon = '🎯';
+                    bgColor = 'bg-blue-100 dark:bg-blue-900';
+                    textColor = 'text-blue-800 dark:text-blue-200';
+                } else if (type === 'agent') {
+                    icon = provider === 'openai' ? '🧠' : '🤖';
+                    bgColor = provider === 'openai' ? 'bg-green-100 dark:bg-green-900' : 'bg-purple-100 dark:bg-purple-900';
+                    textColor = provider === 'openai' ? 'text-green-800 dark:text-green-200' : 'text-purple-800 dark:text-purple-200';
+                } else if (type === 'error') {
+                    icon = '❌';
+                    bgColor = 'bg-red-100 dark:bg-red-900';
+                    textColor = 'text-red-800 dark:text-red-200';
+                }
+                
+                messageEl.innerHTML = `
+                    <div class="p-4 ${bgColor} ${textColor} rounded-lg">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span class="text-lg">${icon}</span>
+                            <span class="font-medium">${sender}</span>
+                            <span class="text-xs opacity-75">${new Date().toLocaleTimeString()}</span>
+                        </div>
+                        <div class="whitespace-pre-wrap">${content}</div>
+                    </div>
+                `;
+                
+                conversation.appendChild(messageEl);
+                conversation.scrollTop = conversation.scrollHeight;
+            }
+            
+            updateProgress(percent, text) {
+                document.getElementById('progress-bar').style.width = `${percent}%`;
+                document.getElementById('progress-text').textContent = `${percent}% - ${text}`;
+            }
+            
+            clearConversation() {
+                document.getElementById('conversation').innerHTML = `
+                    <div class="text-center text-gray-500 dark:text-gray-400 py-8">
+                        <div class="text-4xl mb-2">💭</div>
+                        <p>Start a collaboration to see AI agents working together!</p>
+                    </div>
+                `;
+                document.getElementById('progress-container').classList.add('hidden');
+            }
+            
+            async checkSystemHealth() {
+                try {
+                    const response = await fetch('/health');
+                    const health = await response.json();
+                    
+                    // Update provider status
+                    this.updateProviderStatus('openai', health.providers.openai);
+                    this.updateProviderStatus('anthropic', health.providers.anthropic);
+                    
+                    this.showSuccess('System health check completed');
+                } catch (error) {
+                    this.showError('Health check failed: ' + error.message);
+                }
+            }
+            
+            updateProviderStatus(provider, available) {
+                const statusEl = document.getElementById(`${provider}-status`);
+                const dot = statusEl.querySelector('.w-2');
+                const text = statusEl.querySelector('span');
+                
+                if (available) {
+                    dot.className = 'w-2 h-2 bg-green-500 rounded-full';
+                    text.textContent = 'Available';
+                    text.className = 'text-sm text-green-600 dark:text-green-400';
+                } else {
+                    dot.className = 'w-2 h-2 bg-red-500 rounded-full';
+                    text.textContent = 'Not configured';
+                    text.className = 'text-sm text-red-600 dark:text-red-400';
+                }
+            }
+            
+            async updateSystemStats() {
+                try {
+                    const response = await fetch('/api/stats');
+                    const stats = await response.json();
+                    
+                    const statsContainer = document.getElementById('system-stats');
+                    const statBoxes = statsContainer.querySelectorAll('.text-2xl');
+                    
+                    statBoxes[0].textContent = stats.requests || 0;
+                    statBoxes[1].textContent = stats.activeSessions || 0;
+                    statBoxes[2].textContent = this.formatUptime(stats.uptime);
+                    statBoxes[3].textContent = '-- MB'; // Will be updated when available
+                    
+                } catch (error) {
+                    console.error('Failed to update stats:', error);
+                }
+            }
+            
+            formatUptime(ms) {
+                if (!ms) return '--';
+                const hours = Math.floor(ms / (1000 * 60 * 60));
+                const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+                return `${hours}h ${minutes}m`;
+            }
+            
+            async viewDetailedStats() {
+                try {
+                    const response = await fetch('/api/stats');
+                    const stats = await response.json();
+                    
+                    alert(`Detailed Statistics:\n\nTotal Requests: ${stats.requests}\nOpenAI Requests: ${stats.openaiRequests}\nAnthropic Requests: ${stats.anthropicRequests}\nErrors: ${stats.errors}\nActive Sessions: ${stats.activeSessions}\nTotal Sessions: ${stats.totalSessions}\nUptime: ${this.formatUptime(stats.uptime)}`);
+                } catch (error) {
+                    this.showError('Failed to fetch detailed stats: ' + error.message);
+                }
+            }
+            
+            showSuccess(message) {
+                this.showNotification(message, 'success');
+            }
+            
+            showError(message) {
+                this.showNotification(message, 'error');
+            }
+            
+            showNotification(message, type) {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 transition-all duration-300 transform translate-x-full ${
+                    type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                }`;
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                // Animate in
+                setTimeout(() => {
+                    notification.classList.remove('translate-x-full');
+                }, 100);
+                
+                // Remove after 5 seconds
+                setTimeout(() => {
+                    notification.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 5000);
+            }
+        }
+        
+        // Initialize the orchestrator
+        window.orchestrator = new DualAIOrchestrator();
+        
+        // Heartbeat to keep WebSocket alive
+        setInterval(() => {
+            if (window.orchestrator.isConnected) {
+                window.orchestrator.ws.send(JSON.stringify({ type: 'ping' }));
+            }
+        }, 30000);
+    </script>
+</body>
+</html>
